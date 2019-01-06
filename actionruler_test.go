@@ -89,13 +89,13 @@ func TestActionResult(t *testing.T) {
 						},
 					},
 				},
-				Action: "Fares are high due to high demand",
+				Action: "FARES_ARE_HIGH",
 			},
 			testcase: map[string]interface{}{
 				"surge":     3.2,
 				"farePerKM": 4.3,
 			},
-			expectedRes: "Fares are high due to high demand",
+			expectedRes: "FARES_ARE_HIGH",
 		},
 		{
 			desc: "Sad path",
@@ -114,7 +114,7 @@ func TestActionResult(t *testing.T) {
 						},
 					},
 				},
-				Action: "Fares are high due to high demand",
+				Action: "FARES_ARE_HIGH",
 			},
 			testcase: map[string]interface{}{
 				"surge":     2.2,
@@ -138,16 +138,28 @@ func TestActionResultWithJSON(t *testing.T) {
 		expectedAction interface{}
 	}{
 		{
-			desc: "Happy path",
+			desc: "Happy path, satisfy the ruler",
 			rules: []byte(`{
-		    "action" : "Fares are high due to high demand",
+		    "action" : "FARES_ARE_HIGH",
 		    "ruler" : {"rules" : [{"comparator": "gt", "path": "surge", "value": 2.3},{"comparator": "gte", "path": "farePerKM", "value": 4.3}]}}
 				`),
 			query: map[string]interface{}{
 				"surge":     2.4,
 				"farePerKM": 5.2,
 			},
-			expectedAction: "Fares are high due to high demand",
+			expectedAction: "FARES_ARE_HIGH",
+		},
+		{
+			desc: "Sad path, doesn't satisfy the ruler",
+			rules: []byte(`{
+		    "action" : "FARES_ARE_HIGH",
+		    "ruler" : {"rules" : [{"comparator": "gt", "path": "surge", "value": 2.3},{"comparator": "gte", "path": "farePerKM", "value": 4.3}]}}
+				`),
+			query: map[string]interface{}{
+				"surge":     1.4,
+				"farePerKM": 5.2,
+			},
+			expectedAction: nil,
 		},
 	}
 
