@@ -1,4 +1,4 @@
-package ruler
+package goruler
 
 import (
 	"encoding/json"
@@ -27,7 +27,7 @@ const (
 
 // Ruler defines multiple rules
 type Ruler struct {
-	rules []*Rule
+	Rules []*Rule `json:"rules"`
 }
 
 // NewRuler creates a new Ruler for you
@@ -66,7 +66,7 @@ func (r *Ruler) Rule(path string) *RulerRule {
 		nil,
 	}
 
-	r.rules = append(r.rules, rule)
+	r.Rules = append(r.Rules, rule)
 
 	return &RulerRule{
 		r,
@@ -78,7 +78,7 @@ func (r *Ruler) Rule(path string) *RulerRule {
 // given a map that looks like a JSON object
 // (map[string]interface{})
 func (r *Ruler) Test(o map[string]interface{}) bool {
-	for _, f := range r.rules {
+	for _, f := range r.Rules {
 		val := pluck(o, f.Path)
 
 		if val != nil {

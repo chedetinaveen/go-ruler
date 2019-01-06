@@ -1,7 +1,7 @@
-package ruler
+package goruler
 
 /*
-This struct is the main format for rules or conditions in ruler-compatable libraries.
+Rule is the main format for rules or conditions in ruler-compatable libraries.
 Here's a sample in JSON format:
 	{
 		"comparator": "eq",
@@ -21,7 +21,7 @@ type Rule struct {
 }
 
 /*
-A RulerRule combines a single rule and a whole set of rules and is used
+RulerRule combines a single rule and a whole set of rules and is used
 when building rules programmatically through Ruler's Rule() function.
 It's not meant to be created directly.
 */
@@ -30,47 +30,47 @@ type RulerRule struct {
 	*Rule
 }
 
-// adds an equals condition
+// Eq adds an equals condition
 func (rf *RulerRule) Eq(value interface{}) *RulerRule {
 	return rf.compare(eq, value)
 }
 
-// adds a not equals condition
+// Neq adds a not equals condition
 func (rf *RulerRule) Neq(value interface{}) *RulerRule {
 	return rf.compare(neq, value)
 }
 
-// adds a less than condition
+// Lt adds a less than condition
 func (rf *RulerRule) Lt(value interface{}) *RulerRule {
 	return rf.compare(lt, value)
 }
 
-// adds a less than or equal condition
+// Lte adds a less than or equal condition
 func (rf *RulerRule) Lte(value interface{}) *RulerRule {
 	return rf.compare(lte, value)
 }
 
-// adds a greater than condition
+// Gt adds a greater than condition
 func (rf *RulerRule) Gt(value interface{}) *RulerRule {
 	return rf.compare(gt, value)
 }
 
-// adds a greater than or equal to condition
+// Gte adds a greater than or equal to condition
 func (rf *RulerRule) Gte(value interface{}) *RulerRule {
 	return rf.compare(gte, value)
 }
 
-// adds a matches (regex) condition
+// Matches adds a matches (regex) condition
 func (rf *RulerRule) Matches(value interface{}) *RulerRule {
 	return rf.compare(matches, value)
 }
 
-// adds a not matches condition (ncontains, in the way this thinks of it)
+// NotMatches adds a not matches condition (ncontains, in the way this thinks of it)
 func (rf *RulerRule) NotMatches(value interface{}) *RulerRule {
 	return rf.compare(ncontains, value)
 }
 
-// Stops chaining for the current rule, allowing you
+// End stops chaining for the current rule, allowing you
 // to add rules for other properties
 func (rf *RulerRule) End() *Ruler {
 	return rf.Ruler
@@ -111,7 +111,7 @@ func (rf *RulerRule) compare(comp int, value interface{}) *RulerRule {
 			},
 		}
 		// attach the new filter to the ruler
-		rf.Ruler.rules = append(rf.Ruler.rules, rf.Rule)
+		rf.Ruler.Rules = append(rf.Ruler.Rules, rf.Rule)
 	} else {
 		//if there is no comparator, we can just set things on the current filter
 		rf.Comparator = comparator

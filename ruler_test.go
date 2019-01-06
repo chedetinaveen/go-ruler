@@ -1,4 +1,4 @@
-package ruler
+package goruler
 
 import "testing"
 
@@ -120,7 +120,7 @@ func TestRules(t *testing.T) {
 
 	for _, c := range cases {
 		r := &Ruler{
-			rules: c.rules,
+			Rules: c.rules,
 		}
 
 		if !r.Test(c.o) {
